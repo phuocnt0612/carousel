@@ -4,12 +4,11 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 // For simplicity, support development only
 // And not include any optimization
-const mode = 'development'
+const mode = 'development';
 const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = (relativePath) => path.resolve(appDirectory, relativePath);
 
 module.exports = (webpackConfigEnv, argv) => {
-
   return {
     mode,
     entry: path.resolve(process.cwd(), 'src/index.tsx'),
@@ -17,53 +16,52 @@ module.exports = (webpackConfigEnv, argv) => {
       filename: 'static/js/bundle.js',
       // libraryTarget: "system",
       path: undefined,
-      jsonpFunction: `webpackJsonp_carousel`
+      jsonpFunction: `webpackJsonp_carousel`,
     },
     module: {
       rules: [
         {
-          test: /\.(js|mjs|jsx|ts|tsx)$/,
-          // test: /\.(js|ts)x?$/,
+          test: /\.(js|ts)x?$/,
           exclude: /node_modules/,
           use: {
-            loader: require.resolve("babel-loader")
-          }
+            loader: require.resolve('babel-loader'),
+          },
         },
         {
           test: /\.(scss|sass|css)$/,
           use: ['style-loader', 'css-loader', 'sass-loader'],
-          sideEffects: true
+          sideEffects: true,
         },
         {
           test: /\.(png|jpe?g|gif|woff(2)?|ttf|eot|svg)$/i,
           use: [
             {
-              loader: 'file-loader'
-            }
-          ]
-        }
-      ]
+              loader: 'file-loader',
+            },
+          ],
+        },
+      ],
     },
-    devtool: "sourcemap",
+    devtool: 'sourcemap',
     devServer: {
       compress: true,
       historyApiFallback: true,
       headers: {
-        "Access-Control-Allow-Origin": "*"
+        'Access-Control-Allow-Origin': '*',
       },
-      disableHostCheck: true
+      disableHostCheck: true,
     },
     plugins: [
       new HtmlWebpackPlugin({
         inject: true,
-        template: resolveApp('public/index.html')
-      })
+        template: resolveApp('public/index.html'),
+      }),
     ].filter(Boolean),
     resolve: {
-      extensions: [".mjs", ".js", ".jsx", ".ts", ".tsx", ".wasm", ".json", ".web.ts", ".web.tsx"],
+      extensions: ['.mjs', '.js', '.jsx', '.ts', '.tsx', '.wasm', '.json', '.web.ts', '.web.tsx'],
       alias: {
-        '~': resolveApp('src')
-      }
-    }
-  }
+        '~': resolveApp('src'),
+      },
+    },
+  };
 };
