@@ -16,7 +16,7 @@ export const ArrowButton = styled.button.attrs<{ position?: 'left' | 'right' }>(
   border: none;
   z-index: 999;
 
-  :hover & {
+  :hover& {
     cursor: pointer;
     background-color: rgb(0, 0, 0, 0.2);
   }
