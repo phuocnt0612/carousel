@@ -14,7 +14,6 @@ module.exports = (webpackConfigEnv, argv) => {
     entry: path.resolve(process.cwd(), 'src/index.tsx'),
     output: {
       filename: 'static/js/bundle.js',
-      // libraryTarget: "system",
       path: undefined,
       jsonpFunction: `webpackJsonp_carousel`,
     },
