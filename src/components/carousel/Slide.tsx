@@ -35,6 +35,8 @@ const DraggableItem = styled.div.attrs<{ offsetX?: number; offsetY?: number }>((
   position: absolute;
 `;
 
+const onDragStart = () => false;
+
 export const Slide = memo(({ moveable, children, ...rest }: SlideProps) => {
   const dragItemRef = useRef<HTMLDivElement>(null);
   const [itemOffset, setItemOffset] = useState({ offsetX: 0, offsetY: 0 });
@@ -78,7 +80,7 @@ export const Slide = memo(({ moveable, children, ...rest }: SlideProps) => {
         ref={dragItemRef}
         offsetX={itemOffset.offsetX}
         offsetY={itemOffset.offsetY}
-        onDragStart={() => false}
+        onDragStart={onDragStart}
       >
         {children}
       </DraggableItem>

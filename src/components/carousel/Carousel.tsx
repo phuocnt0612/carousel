@@ -1,4 +1,4 @@
-import React, { Children, memo, useEffect, useRef } from 'react';
+import React, { Children, memo, useCallback, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { CarouselProps } from '~/components/carousel/carousel.props';
 import { Slide } from '~/components/carousel/Slide';
@@ -30,8 +30,9 @@ const scrollToSlide = (idx: number, options = {}) => {
 };
 
 const PREFIX = 'CAROUSEL_';
-
+const onDragStart = () => false;
 let scrollTimeout;
+
 export const Carousel = memo(
   ({
     onSlideChange,
@@ -108,25 +109,27 @@ export const Carousel = memo(
       return () => clearTimeout(scrollTimeout);
     }, [activeIndex, children]);
 
-    const renderSlides = (position: 'before' | 'after' | undefined = undefined) => {
-      const length = Children.count(children);
-      return Children.map(children, (item, idx) => {
-        let slideIdx = idx;
-        if (position === 'after') {
-          slideIdx = length + idx;
-        }
-        if (position === 'before') {
-          slideIdx = idx - length;
-        }
-        const id = `${PREFIX}${slideIdx}`;
-        return (
-          <Slide key={id} id={id} moveable={moveable} onDragStart={() => false}>
-            {item}
-          </Slide>
-        );
-      });
-    };
-
+    const renderSlides = useCallback(
+      (position: 'before' | 'after' | undefined = undefined) => {
+        const length = Children.count(children);
+        return Children.map(children, (item, idx) => {
+          let slideIdx = idx;
+          if (position === 'after') {
+            slideIdx = length + idx;
+          }
+          if (position === 'before') {
+            slideIdx = idx - length;
+          }
+          const id = `${PREFIX}${slideIdx}`;
+          return (
+            <Slide key={id} id={id} moveable={moveable} onDragStart={onDragStart}>
+              {item}
+            </Slide>
+          );
+        });
+      },
+      [children, moveable],
+    );
     const displayNextSlide = (options = {}) => {
       scrollToSlide(activeIndex + 1, options);
       onSlideChange(activeIndex + 1);
